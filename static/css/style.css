@@ -1,0 +1,33 @@
+td{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    background: cornflowerblue;
+    border-radius: 15%;
+}
+
+.tdcolorao{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    background: crimson;
+    border-radius: 15%;
+}
+
+.tdamari{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    background: yellow;
+    border-radius: 15%;
+}
+
+h1{
+    font-size: 100px;
+    color: blue;
+}
+
+.pressed{
+    text-decoration: none;
+    background: crimson;
+}
