@@ -1,4 +1,4 @@
-td{
+td {
     width: 30px;
     height: 30px;
     border: 1px solid black;
@@ -6,7 +6,7 @@ td{
     border-radius: 15%;
 }
 
-.tdcolorao{
+.tdInicio {
     width: 30px;
     height: 30px;
     border: 1px solid black;
@@ -14,7 +14,7 @@ td{
     border-radius: 15%;
 }
 
-.tdamari{
+.tdMeta {
     width: 30px;
     height: 30px;
     border: 1px solid black;
@@ -22,12 +22,71 @@ td{
     border-radius: 15%;
 }
 
-h1{
+h1 {
     font-size: 100px;
     color: blue;
 }
 
-.pressed{
-    text-decoration: none;
-    background: crimson;
+/* Estilo de la Tabla */
+#tabla {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
+/* 
+    Estilos de los Botones
+*/
+
+#botonInicio {
+    border: 1px solid black;
+    background: rgb(129, 255, 129);
+    padding: 5px;
+}
+#botonInicio:hover{
+    cursor: pointer;
+    background: rgb(47, 255, 47);
+}
+#botonInicio:disabled{
+    background: lightgray;
+}
+
+#botonMeta {
+    border: 1px solid black;
+    background: rgb(82, 229, 255);
+    padding: 5px;
+}
+#botonMeta:hover{
+    cursor: pointer;
+    background: rgb(1, 204, 255);
+}
+#botonMeta:disabled{
+    background: lightgray;
+}
+
+#botonCasillasProhibidas {
+    border: 1px solid black;
+    background: rgb(255, 82, 82);
+    padding: 5px;
+}
+#botonCasillasProhibidas:hover {
+    cursor: pointer;
+    background: rgb(255, 0, 0);
+}
+#botonCasillasProhibidas:disabled{
+    background: lightgray;
+}
+
+#resolverAlgoritmo{
+    background: rgb(255, 255, 61);
+    padding: 15px;
+    font-size: 23px;
+    color: orangered;
+    border: 2px solid orange;
+}
+#resolverAlgoritmo:hover{
+    padding: 17px;
+    cursor:pointer;
+    background: rgb(255, 255, 14);
+}
+
+
