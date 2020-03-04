@@ -48,6 +48,7 @@ h1 {
 }
 #botonInicio:disabled{
     background: lightgray;
+    cursor: default;
 }
 
 #botonMeta {
@@ -61,6 +62,7 @@ h1 {
 }
 #botonMeta:disabled{
     background: lightgray;
+    cursor: default;
 }
 
 #botonCasillasProhibidas {
@@ -74,6 +76,7 @@ h1 {
 }
 #botonCasillasProhibidas:disabled{
     background: lightgray;
+    cursor: default;
 }
 
 #resolverAlgoritmo{
@@ -84,9 +87,18 @@ h1 {
     border: 2px solid orange;
 }
 #resolverAlgoritmo:hover{
-    padding: 17px;
     cursor:pointer;
     background: rgb(255, 255, 14);
+}
+#resolverAlgoritmo:disabled{
+    cursor: default;
+    background: lightgray;
+    padding: 15px;
+    color: gray;
+    border:1px solid black;
+}
+#botonesAccion{
+    margin-bottom: 30px;
 }
 
 
