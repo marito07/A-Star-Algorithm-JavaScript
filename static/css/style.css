@@ -7,18 +7,20 @@ td {
 }
 
 .tdInicio {
+    text-align: center;
     width: 30px;
     height: 30px;
     border: 1px solid black;
-    background: crimson;
+    background: rgb(47, 255, 47);
     border-radius: 15%;
 }
 
 .tdMeta {
+    text-align: center;
     width: 30px;
     height: 30px;
     border: 1px solid black;
-    background: yellow;
+    background: rgb(1, 204, 255);
     border-radius: 15%;
 }
 
@@ -102,3 +104,6 @@ h1 {
 }
 
 
+.prohibida{
+    background: rgb(255, 0, 0);
+}
