@@ -3,12 +3,14 @@ $(function () {
 
     var numFilas = 5; // Numero de filas de la tabla
     var numColumnas = 5; // Numero de columnas de la tabla
+    $("#mensajesError").hide();
+    $("#mensajeCamino").hide();
 
     // Funcion que añade una fila nueva a la tabla
     $("#buttonRow").click(function () {
         var texto = "";
         numFilas = numFilas + 1;
-        for(var i = 0; i < numColumnas; i++){
+        for (var i = 0; i < numColumnas; i++) {
             texto += "<td></td>"
         }
         $("#tabla").append("<tr class=\"fila\"> <th scope=\"row\">" + numFilas + "</th>" + texto + "</tr>");
@@ -112,7 +114,7 @@ $(function () {
     })
 
 
-    function Nodo(x,y){
+    function Nodo(x, y) { // "Clase" Nodo para usarla en las casillas de la tabla
         this.x = x;
         this.y = y;
 
@@ -125,34 +127,32 @@ $(function () {
     }
 
     $("#resolverAlgoritmo").click(function () {
-        /* Deshabilitamos los botones */
-        $("#botonesAccion").find('button').each(function () {
-            $(this).prop('disabled', true);
-        })
 
 
-        var ABIERTA = [];
-        var CERRADA = [];
-        var camino = [];
+
+
+        var ABIERTA = []; // Lista ABIERTA
+        var CERRADA = []; // Lista CERRADA
+        var camino = []; // Camino más corto
 
         // Leemos de la tabla la posición del INICIO, de la META y de las CASILLAS PROHIBIDAS
         var tabla;
         var i = 1;
-        var casillaInicio, casillaMeta;
+        var casillaInicio = null, casillaMeta = null;
         tabla = new Array(numFilas);
         $("#tabla").find(".fila").each(function () {
-            tabla[i-1] = new Array(numColumnas);
+            tabla[i - 1] = new Array(numColumnas);
             var j = 1;
             $(this).find("td").each(function () {
-                tabla[i-1][j-1] = new Nodo(i,j);
+                tabla[i - 1][j - 1] = new Nodo(i, j);
                 if ($(this).hasClass("tdInicio") == true) {
-                    casillaInicio = tabla[i-1][j-1];
+                    casillaInicio = tabla[i - 1][j - 1];
                 }
-                else if ($(this).hasClass("tdMeta") == true) {
-                    casillaMeta = tabla[i-1][j-1];
+                if ($(this).hasClass("tdMeta") == true) {
+                    casillaMeta = tabla[i - 1][j - 1];
                 }
-                else if ($(this).hasClass("prohibida") == true){
-                    CERRADA.push(tabla[i-1][j-1]);
+                if ($(this).hasClass("prohibida") == true) {
+                    CERRADA.push(tabla[i - 1][j - 1]);
                 }
                 j++;
             });
@@ -162,124 +162,163 @@ $(function () {
         //Aquí comienza el algoritmo como tal
         var salida = false;
         ABIERTA.push(casillaInicio);
-
-        while(salida != true){
-            if(ABIERTA.length > 0){
-                var posSeleccionado = 0;
-                var seleccionado = ABIERTA[0]; 
-
-                for(var i = 0; i < ABIERTA.length; i++){
-                    if(ABIERTA[i].f < ABIERTA[posSeleccionado].f){
-                        posSeleccionado = i;
-                        seleccionado = ABIERTA[i];
-                    }
-                }
-                console.log(`El Seleccionado es: `);
-                console.log(seleccionado);
-                console.log("El final es")
-                console.log(casillaMeta);
-                if(seleccionado === casillaMeta){ // Si se llega al final
-                    console.log("Llega al final");
-                    var aux = seleccionado;
-                    camino.push(aux);
-
-                    while(aux.padre !== null){
-                        aux = aux.padre;
-                        camino.push(aux);
-                    }
-
-                    salida = true;
-                }
-                else{ // Si no se llega al final
-                    // Borramos el elemento de la lista ABIERTA y lo añadimos a la CERRADA
-                    ABIERTA.splice(posSeleccionado,1);
-                    CERRADA.push(seleccionado);
-
-                    var sucesores = []; // Lista de Nodos sucesores del seleccionado;
-                    var ValoresG = [];
-                    if(seleccionado.x - 1 > 0){ // El de la izquierda
-                        sucesores.push(tabla[seleccionado.x - 2][seleccionado.y - 1]);
-                        ValoresG.push(1);
-                    }
-                    if(seleccionado.x < numFilas){ // El de la derecha
-                        sucesores.push(tabla[seleccionado.x][seleccionado.y - 1]);
-                        ValoresG.push(1);
-                    }
-                    if(seleccionado.y - 1 > 0){ // El de arriba
-                        sucesores.push(tabla[seleccionado.x - 1][seleccionado.y - 2]);
-                        ValoresG.push(1);
-                    }
-                    if(seleccionado.y < numColumnas){ // El de abajo
-                        sucesores.push(tabla[seleccionado.x - 1][seleccionado.y]);
-                        ValoresG.push(1);
-                    }
-                    if(seleccionado.y - 1 > 0 && seleccionado.x - 1 > 0){ // El de arriba a la izquierda
-                        sucesores.push(tabla[seleccionado.x - 2][seleccionado.y - 2]);
-                        ValoresG.push(Math.sqrt(2));
-                    }
-                    if(seleccionado.y - 1 > 0 && seleccionado.x < numFilas){ // El de arriba a la derecha
-                        sucesores.push(tabla[seleccionado.x][seleccionado.y - 2]);
-                        ValoresG.push(Math.sqrt(2));
-                    }
-                    if(seleccionado.y < numColumnas && seleccionado.x - 1 > 0){ // El de abajo a la izquierda
-                        sucesores.push(tabla[seleccionado.x - 2][seleccionado.y]);
-                        ValoresG.push(Math.sqrt(2));
-                    }
-                    if(seleccionado.y < numColumnas && seleccionado.x < numFilas){ // El de abajo a la derecha
-                        sucesores.push(tabla[seleccionado.x][seleccionado.y]);
-                        ValoresG.push(Math.sqrt(2));
-                    }
-
-                    for(var i = 0; i < sucesores.length; i++){
-                        var sucesor = sucesores[i];
-                        if(!CERRADA.includes(sucesor)){
-                            var newG = seleccionado.g + ValoresG[i];
-                            var newH = h(sucesor, casillaMeta);
-                            var newF = newG + newH;
-
-                            if(ABIERTA.includes(sucesor)){
-                                if(newF < sucesor.f){
-                                    sucesor.g = newG;
-                                    sucesor.h = newH;
-                                    sucesor.f = newF;
-                                    sucesor.padre = seleccionado;
-                                }
-                            }
-                            else{
-                                sucesor.g = newG;
-                                sucesor.padre = seleccionado;
-                                sucesor.h = newH;
-                                ABIERTA.push(sucesor);
-                            }
+        if (casillaMeta === null || casillaInicio === null) {
+            alert('Posicion de Meta o Inicio no definida');
+        }
+        else {
+            /* Deshabilitamos los botones */
+            $("#botonesAccion").find('button').each(function () {
+                $(this).prop('disabled', true);
+            })
+            let proInicio = false, proMeta = false;
+            if (CERRADA.includes(casillaInicio)) {
+                proInicio = true;
+            }
+            if (CERRADA.includes(casillaMeta)) {
+                proMeta = true;
+            }
+            while (salida != true) { // Si la salida es false prosigue el algoritmo
+                if (ABIERTA.length > 0 && !proMeta && !proInicio) { // Si aun quedan nodos en la lista abierda  && !CERRADA.includes(casillaInicio) && !CERRADA.includes(casillaMeta)
+                    var posSeleccionado = 0;
+                    var seleccionado = ABIERTA[0];
 
 
-                            // valores de g y f
-
-                            /* sucesor.h = h(sucesor, casillaMeta);
-                            console.log("---")
-                            console.log("Sucesor G:")
-                            console.log(sucesor.g);
-                            console.log("---")
-                            sucesor.f = sucesor.g + sucesor.h;
-                             */
-                            
+                    for (var i = 0; i < ABIERTA.length; i++) { // Se selecciona de la lista ABIERTA el que tenga un menor valor f
+                        if (ABIERTA[i].f < ABIERTA[posSeleccionado].f) {
+                            posSeleccionado = i;
+                            seleccionado = ABIERTA[i];
                         }
                     }
 
-                }
-            }
-            else {
-                salida = true;
-            }
-        } 
+                    if (seleccionado === casillaMeta) { // Si se selecciona la casillaMeta
+                        var aux = seleccionado;
+                        camino.push(aux);
 
-        console.log(camino);
+                        while (aux.padre !== null) { // Se guarda el camino en un array
+                            aux = aux.padre;
+                            camino.push(aux);
+                        }
+
+                        salida = true; // Se cambia salida a true
+                    }
+                    else { // Si no se llega al final
+                        // Borramos el elemento de la lista ABIERTA y lo añadimos a la CERRADA
+                        ABIERTA.splice(posSeleccionado, 1);
+                        CERRADA.push(seleccionado);
+
+                        var sucesores = []; // Lista de Nodos sucesores del seleccionado;
+                        var ValoresG = []; // Lista del valor a sumar al g en cada caso sqrt(2) en el caso de los vecinos diagonales, y 1 en el caso de los horizontales y verticales
+                        if (seleccionado.x - 1 > 0) { // El de la izquierda
+                            sucesores.push(tabla[seleccionado.x - 2][seleccionado.y - 1]);
+                            ValoresG.push(1);
+                        }
+                        if (seleccionado.x < numFilas) { // El de la derecha
+                            sucesores.push(tabla[seleccionado.x][seleccionado.y - 1]);
+                            ValoresG.push(1);
+                        }
+                        if (seleccionado.y - 1 > 0) { // El de arriba
+                            sucesores.push(tabla[seleccionado.x - 1][seleccionado.y - 2]);
+                            ValoresG.push(1);
+                        }
+                        if (seleccionado.y < numColumnas) { // El de abajo
+                            sucesores.push(tabla[seleccionado.x - 1][seleccionado.y]);
+                            ValoresG.push(1);
+                        }
+                        if (seleccionado.y - 1 > 0 && seleccionado.x - 1 > 0) { // El de arriba a la izquierda
+                            sucesores.push(tabla[seleccionado.x - 2][seleccionado.y - 2]);
+                            ValoresG.push(Math.sqrt(2));
+                        }
+                        if (seleccionado.y - 1 > 0 && seleccionado.x < numFilas) { // El de arriba a la derecha
+                            sucesores.push(tabla[seleccionado.x][seleccionado.y - 2]);
+                            ValoresG.push(Math.sqrt(2));
+                        }
+                        if (seleccionado.y < numColumnas && seleccionado.x - 1 > 0) { // El de abajo a la izquierda
+                            sucesores.push(tabla[seleccionado.x - 2][seleccionado.y]);
+                            ValoresG.push(Math.sqrt(2));
+                        }
+                        if (seleccionado.y < numColumnas && seleccionado.x < numFilas) { // El de abajo a la derecha
+                            sucesores.push(tabla[seleccionado.x][seleccionado.y]);
+                            ValoresG.push(Math.sqrt(2));
+                        }
+
+                        for (var i = 0; i < sucesores.length; i++) { // Recorre la lista de los sucesores
+                            var sucesor = sucesores[i];
+                            if (!CERRADA.includes(sucesor)) { // Si se no se encuentra en la lista CERRADA
+                                var newG = seleccionado.g + ValoresG[i];
+                                var newH = h(sucesor, casillaMeta);
+                                var newF = newG + newH;
+
+                                if (ABIERTA.includes(sucesor)) {
+                                    if (newF < sucesor.f) { // Si se encuentra en la lista ABIERTA ya, se selecciona el menor valor de f
+                                        sucesor.g = newG;
+                                        sucesor.h = newH;
+                                        sucesor.f = newF;
+                                        sucesor.padre = seleccionado;
+                                    }
+                                }
+                                else { // Si no se encuetra se añade
+                                    sucesor.g = newG;
+                                    sucesor.padre = seleccionado;
+                                    sucesor.h = newH;
+                                    ABIERTA.push(sucesor);
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                else { // Si no quedan Nodos en la Lista Abierta
+                    salida = true;
+                    $("#mensajesError").show();
+                    $("#mensajesError").text("NO HAY CAMINO POSIBLE ENTRE LOS DOS PUNTOS");
+                    $("#mensajesError").css("color", "red");
+                }
+
+
+            }
+            if (camino.length !== 0) { // Forma el mensaje inferior a mostrar en la pantalla
+                let textamon = "El Camino mas corto entre el Inicio y la meta es: ";
+                for (let i = 0; i < camino.length; i++) {
+                    textamon += "(" + camino[i].x + "," + camino[i].y + ")";
+                    if (i !== camino.length - 1) {
+                        textamon += ",";
+                    }
+                }
+                $("#mensajeCamino").show(); //Muestra el mensaje del camino
+                $("#mensajeCamino").text(textamon);
+                $("#mensajeCamino").css("color", "green");
+                let i = 1;
+                $("#tabla").find(".fila").each(function () {
+                    let j = 1;
+                    $(this).find("td").each(function () {
+                        for (let q = 0; q < camino.length; q++) {
+                            if (camino[q].x == i && camino[q].y == j) { // Se cambia el color a un rosa claro si la casilla forma parte del camino
+                                $(this).css("background-color", "#ff6deb");
+                            }
+                        }
+                        j++;
+                    });
+                    i++;
+                });
+
+                /*Para el debug por consola*/
+                console.log("Lista ABIERTA: ");
+                console.log(ABIERTA);
+                console.log("---------");
+                console.log("Lista CERRADA: ");
+                console.log(CERRADA);
+                console.log("---------");
+
+            }
+        }
+
 
     });
 
 
     // Función h(n)
-    function h(casillaX, casillaMeta){
-        return Math.sqrt(Math.pow(casillaX.fila - casillaMeta.fila) + Math.pow(casillaX.col - casillaMeta.fila) );
+    function h(casillaX, casillaMeta) {
+        return Math.sqrt(Math.pow(casillaX.fila - casillaMeta.fila) + Math.pow(casillaX.col - casillaMeta.fila));
     }
 });

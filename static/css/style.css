@@ -1,12 +1,17 @@
 *{
     font-family: 'Roboto', sans-serif;
+    text-align: center;
+    margin:0;
+}
+body{
+    background: rgb(195, 196, 195);
 }
 
 td {
     width: 30px;
     height: 30px;
     border: 1px solid black;
-    background: cornflowerblue;
+    background: white;
     border-radius: 15%;
 }
 
@@ -30,7 +35,9 @@ td {
 
 h1 {
     font-size: 100px;
-    color: blue;
+    color: white;
+    background-color: rgb(48, 48, 48);
+    margin-bottom: 15px;
 }
 
 /* Estilo de la Tabla */
@@ -85,6 +92,17 @@ h1 {
     cursor: default;
 }
 
+#buttonCol, #buttonRow{
+    border: 1px solid black;
+    background: gray;
+    padding: 5px;
+    color: white;
+}
+
+#buttonCol:hover, #buttonRow:hover{
+    cursor: pointer;
+    background: rgb(88, 86, 86);
+}
 #resolverAlgoritmo{
     background: rgb(255, 255, 61);
     padding: 15px;
